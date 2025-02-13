@@ -1,20 +1,19 @@
 <template>
-  <div class="home">
-    <h2>home{{ counterStore.counter }}-{{ counterStore.doubleCounter }}</h2>
-    <button @click="addCouter">click</button>
+  <div class="login">
+    <LoginPanel />
   </div>
 </template>
 
 <script setup lang="ts">
-import useCounterStore from "../../store/counter"
-const counterStore = useCounterStore()
-
-const addCouter = () => {
-  counterStore.changeCounterAction(123)
-}
+import LoginPanel from "./LoginPanel.vue"
 </script>
 
 <style lang="less" scoped>
-.home {
+.login {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
