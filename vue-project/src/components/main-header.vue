@@ -56,6 +56,7 @@ const menuIconClick = () => {
 const exitSystem = () => {
   router.push("/login")
   localStorage.removeItem("token")
+  localStorage.removeItem("userMenus")
 }
 </script>
 

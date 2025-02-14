@@ -16,6 +16,7 @@
           </template>
           <template v-if="`children` in item">
             <el-menu-item
+              @click="handleMenuClick(subItem)"
               :index="String(subItem.id)"
               v-for="subItem in item.children"
               :key="`${subItem.parentId}-${subItem.id}`"
@@ -30,6 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import router from "../router"
 import useLoginStore from "../store/Login/login"
 // 定义props接收属性
 defineProps({
@@ -39,6 +41,10 @@ defineProps({
   },
 })
 const loginStore = useLoginStore()
+
+const handleMenuClick = (item) => {
+  router.push(item.url)
+}
 </script>
 
 <style lang="less" scoped>
