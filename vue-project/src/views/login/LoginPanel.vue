@@ -40,17 +40,22 @@
 <script setup lang="ts">
 import PanelAccount from "./PanelAccount.vue"
 import PanelPhone from "./PanelPhone.vue"
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { throttle } from "lodash"
-const remember = ref<boolean>(false)
+const remember = ref<boolean>(Boolean(localStorage.getItem("loginFlag") === "false" ? false : true))
 const activeName = ref<string>("account")
 const accountRef = ref<InstanceType<typeof PanelAccount>>() // 取得组件的实例 固定写法
+
+// 判断是否记住密码(方法2)
+watch(remember, (newVal) => {
+  localStorage.setItem("loginFlag", String(newVal))
+})
 
 const handleLogin = throttle(() => {
   if (activeName.value === "account") {
     // 1. 获取子组件的实例
     // 2. 调用子组件的方法
-    accountRef.value.loginAction()
+    accountRef.value.loginAction(remember.value)
   } else {
   }
 }, 1000)

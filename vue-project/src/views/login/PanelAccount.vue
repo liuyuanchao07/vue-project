@@ -21,10 +21,12 @@
 import { reactive, ref } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
+import useLoginStore from "../../store/Login/login"
 const accountFromRef = ref<FormInstance>()
+const loginStore = useLoginStore()
 const accountForm = reactive({
-  name: "",
-  password: "",
+  name: localStorage.getItem("name") ?? "",
+  password: localStorage.getItem("password") ?? "",
 })
 
 interface RuleForm {
@@ -43,10 +45,21 @@ const accountRules = reactive<FormRules<RuleForm>>({
   ],
 })
 
-const loginAction = () => {
+const loginAction = (flag: boolean) => {
   accountFromRef.value.validate((valid) => {
     if (valid) {
-      console.log("ok")
+      const { name, password } = accountForm
+      loginStore.loginAccountAction({ name, password }).then((res) => {
+        // 判断是否记住密码(方法1 方法2是watch)
+        // localStorage.setItem("loginFlag", String(flag))
+        if (flag) {
+          localStorage.setItem("name", name)
+          localStorage.setItem("password", password)
+        } else {
+          localStorage.removeItem("name")
+          localStorage.removeItem("password")
+        }
+      })
     } else {
       ElMessage.error({
         message: "Oops, this is a error message.",
