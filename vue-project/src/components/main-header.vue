@@ -44,12 +44,14 @@ import { ref } from "vue"
 import router from "../router"
 const openClose = ref<boolean>(false)
 
+// 声明事件
 const emit = defineEmits(["foldChange"])
 
 const menuIconClick = () => {
   // 内部改变状态
   openClose.value = !openClose.value
   // 将事件和状态传递给父组件
+  // 发射事件
   emit("foldChange", openClose.value)
 }
 
