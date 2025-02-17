@@ -1,8 +1,4 @@
 <template>
-  <!-- <div class="main">
-    <h2>main</h2>
-    <button @click="loginout">logout</button>
-  </div> -->
   <div class="common-layout">
     <el-container class="main-container">
       <el-aside class="main-aside" :width="isCollapse ? '80px' : '210px'">
