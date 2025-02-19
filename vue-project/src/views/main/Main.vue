@@ -9,6 +9,7 @@
           <MainHeader @fold-change="handleFoldChange" />
         </el-header>
         <el-main class="main-content">
+          {{ userId }}
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -17,9 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, defineProps } from "vue"
+import { useRoute } from "vue-router"
 import MainMenu from "../../components/main-menu.vue"
 import MainHeader from "../../components/main-header.vue"
+
+defineProps(["userId"])
 
 let isCollapse = ref<boolean>(false)
 

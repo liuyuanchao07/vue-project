@@ -72,7 +72,12 @@ const useLoginStore = defineStore("login", {
         ]
         localStorage.setItem("userMenus", JSON.stringify(this.userMenus))
         // 页面跳转
-        router.push("/main")
+        router.push({
+          name: "main",
+          params: {
+            userId: "123",
+          },
+        })
       })
     },
   },
