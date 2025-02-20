@@ -60,4 +60,16 @@ const router = createRouter({
   routes: routes,
 });
 
+// beforeEach 前置守卫
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem("token");
+  if (!token && to.path !== "/login") {
+    return "/login";
+  }
+
+  if (token && to.path === "/login") {
+    return "/main";
+  }
+});
+
 export default router;

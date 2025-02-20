@@ -7,13 +7,7 @@
             formType ? "返回登录" : "注册账号"
           }}</el-link>
         </div>
-        <el-form
-          :model="ruleForm"
-          ref="ruleFormRef"
-          :rules="rules"
-          :size="formSize"
-          status-icon
-        >
+        <el-form :model="ruleForm" ref="ruleFormRef" :rules="rules" status-icon>
           <el-form-item prop="phone">
             <Input
               placeholder="手机号"
@@ -47,7 +41,7 @@
           </el-form-item>
           <el-form-item>
             <el-button
-              @click="submitForm"
+              @click="submitForm(ruleFormRef)"
               type="primary"
               :style="{ width: '100%' }"
               >{{ formType ? "注册账号" : "登录" }}</el-button
@@ -64,7 +58,13 @@ import { ref, reactive } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { throttle } from "lodash";
 import showMessage from "../../components/ElMessage";
+import customLoading from "../../components/ElLoading";
 import Input from "../../components/Input.vue";
+import { getCode, userAuth, login } from "../../http/api";
+import { Lock } from "@element-plus/icons-vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 let formType = ref(false);
 interface RuleForm {
@@ -80,7 +80,7 @@ interface ValidateCode {
 }
 
 const ruleForm = reactive<RuleForm>({
-  phone: "111",
+  phone: "",
   password: "",
   code: "",
 });
@@ -116,6 +116,24 @@ const validateCodeChange = throttle(() => {
             validateCode.time = 60;
           }
         }, 1000);
+
+        const loading = customLoading();
+        getCode({
+          tel: ruleForm.phone,
+        })
+          .then((res) => {
+            showMessage({
+              type: "success",
+              message: "验证码已发送",
+            });
+            loading.close();
+          })
+          .catch((err) => {
+            showMessage({
+              message: "验证码发送失败",
+            });
+            loading.close();
+          });
       }
     })
     .catch((error) => {
@@ -125,7 +143,40 @@ const validateCodeChange = throttle(() => {
     });
 }, 1000);
 
-const submitForm = () => {};
+const submitForm = async (formEl) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      if (formType.value) {
+        // 注册页面
+        userAuth(ruleForm).then((res) => {
+          showMessage({
+            type: "success",
+            message: "注册成功",
+          });
+          formType.value = false;
+        });
+      } else {
+        // 登录页面
+        login(ruleForm).then((res) => {
+          localStorage.setItem("token", res.data.items[0].token);
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify(res.data.items[0].userInfo)
+          );
+          showMessage({
+            type: "success",
+            message: "登录成功",
+          });
+
+          router.push("/main");
+        });
+      }
+    } else {
+      console.log("error submit!", fields);
+    }
+  });
+};
 
 const rules = reactive<FormRules<RuleForm>>({
   phone: [
