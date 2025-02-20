@@ -70,6 +70,7 @@ const handleCommand = (command) => {
   if (command === "logout") {
     localStorage.removeItem("token");
     localStorage.removeItem("userInfo");
+    localStorage.removeItem("menuActiveIndex");
     router.push("/login");
   }
 };

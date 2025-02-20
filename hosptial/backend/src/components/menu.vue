@@ -2,7 +2,7 @@
   <el-menu
     background-color="#545c64"
     class="el-menu-vertical-demo"
-    default-active="1"
+    :default-active="active"
     text-color="#fff"
     :collapse="menuState.isCollapse"
   >
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { computed, defineProps } from "vue";
 import { useRouter } from "vue-router";
 import menuStore from "../store/menu";
 const menuState = menuStore();
@@ -48,9 +48,15 @@ const { menu } = defineProps(["menu"]);
 
 const router = useRouter();
 
+const active = computed(() => menuState.menuActiveIndex);
+
 const handleClick = (item) => {
   router.push(item.meta.path);
   menuState.addSelectedMenu(item);
+  menuState.$patch((state) => {
+    state.menuActiveIndex = item.meta.id;
+    localStorage.setItem("menuActiveIndex", item.meta.id);
+  });
 };
 </script>
 

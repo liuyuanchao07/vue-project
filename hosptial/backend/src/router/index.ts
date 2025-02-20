@@ -9,6 +9,9 @@ const routes = [
     path: "/main",
     name: "main",
     component: () => import("../views/main/index.vue"),
+    redirect: () => {
+      return "/dashboard";
+    },
     children: [
       {
         path: "/dashboard",

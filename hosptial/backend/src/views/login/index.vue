@@ -63,6 +63,8 @@ import Input from "../../components/Input.vue";
 import { getCode, userAuth, login } from "../../http/api";
 import { Lock } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
+import menuStore from "../../store/menu";
+const menuState = menuStore();
 
 const router = useRouter();
 
@@ -170,6 +172,10 @@ const submitForm = async (formEl) => {
           });
 
           router.push("/main");
+          menuState.$patch((state) => {
+            state.menuActiveIndex = "1";
+            localStorage.setItem("menuActiveIndex", "1");
+          });
         });
       }
     } else {
