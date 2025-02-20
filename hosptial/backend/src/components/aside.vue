@@ -15,7 +15,7 @@ import menuStore from "../store/menu";
 import { useRouter } from "vue-router";
 import { reactive } from "vue";
 const router = useRouter();
-const menu = reactive(router.options.routes[0].children);
+const menu = reactive(router.options.routes[1].children);
 const menuState = menuStore();
 </script>
 
