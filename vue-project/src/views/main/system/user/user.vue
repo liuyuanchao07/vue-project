@@ -1,12 +1,5 @@
-<template>
-  <div class="home">
-    <h2>user</h2>
-  </div>
-</template>
+<template>1</template>
 
 <script setup lang="ts"></script>
 
-<style lang="less" scoped>
-.home {
-}
-</style>
+<style lang="less" scoped></style>

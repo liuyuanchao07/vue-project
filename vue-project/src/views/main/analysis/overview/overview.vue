@@ -1,29 +1,5 @@
-<template>
-  <div class="home">
-    <h2 ref="title">{{ num }}</h2>
-    <button @click="hanlechange">click</button>
-  </div>
-</template>
+<template>1</template>
 
-<script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue"
-let title = ref<HTMLElement>()
-let num = ref(0)
+<script setup lang="ts"></script>
 
-onMounted(() => {
-  // console.log(title)
-})
-
-const hanlechange = () => {
-  num.value++
-
-  nextTick(() => {
-    console.log(title.value.innerHTML)
-  })
-}
-</script>
-
-<style lang="less" scoped>
-.home {
-}
-</style>
+<style lang="less" scoped></style>
