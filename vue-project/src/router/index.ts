@@ -1,9 +1,4 @@
-import {
-  createRouter,
-  createMemoryHistory,
-  createWebHistory,
-  createWebHashHistory,
-} from "vue-router"
+import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,49 +9,41 @@ const router = createRouter({
     },
     {
       path: "/login",
-      component: () => import("../views/login/Login.vue"),
+      component: () => import("../views/login/login.vue"),
     },
     {
-      path: "/main/:userId",
-      name: "main",
-      props: true,
-      component: () => import("../views/main/Main.vue"),
+      path: "/main/",
+      component: () => import("../views/main/main.vue"),
       children: [
         {
           path: "/main/analysis/overview",
-          component: () => import("../views/main/analysis/overview/overview.vue"),
+          component: () => import("../views/main/analysis/overview/index.vue"),
         },
         {
           path: "/main/analysis/dashboard",
-          component: () => import("../views/main/analysis/dashboard/dashboard.vue"),
+          component: () => import("../views/main/analysis/dashboard/index.vue"),
         },
         {
           path: "/main/system/user",
-          component: () => import("../views/main/system/user/user.vue"),
+          component: () => import("../views/main/system/user/index.vue"),
         },
         {
           path: "/main/system/role",
-          component: () => import("../views/main/system/role/role.vue"),
+          component: () => import("../views/main/system/role/index.vue"),
         },
       ],
     },
     {
-      path: "/:pathMatch(.*)",
+      path: "/:pathMatch(.*)*",
       name: "NoFound",
-      component: () => import("../views/notFound/NotFound.vue"),
+      component: () => import("../views/notFound/index.vue"),
     },
   ],
 })
 
 // 导航守卫
 // to:跳转到的位置 from:从哪来
-router.beforeEach((to, from) => {
-  let includesFLag = false
-  const userMenus = JSON.parse(localStorage.getItem("userMenus") as string) ?? []
-  userMenus.forEach((item: any) => {
-    includesFLag = item.children.some((children: any) => children.url === to.path)
-  })
-
+router.beforeEach((to) => {
   if (to.path !== "/login") {
     // 只有登录成功才可以进入到main页面
     if (!localStorage.getItem("token")) {
@@ -68,10 +55,6 @@ router.beforeEach((to, from) => {
     if (localStorage.getItem("token")) {
       return "/main"
     }
-  }
-
-  if (!includesFLag && to.path !== "/login") {
-    // return "/:pathMatch(.*)"
   }
 })
 

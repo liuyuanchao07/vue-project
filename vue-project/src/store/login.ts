@@ -1,5 +1,5 @@
 import { defineStore } from "pinia"
-import router from "../../router"
+import router from "@/router/index"
 
 interface IData {
   status: number
@@ -12,7 +12,7 @@ interface IData {
 
 interface IState {
   token: string
-  userMenus: any
+  userMenus: any[]
 }
 
 const useLoginStore = defineStore("login", {
@@ -23,9 +23,9 @@ const useLoginStore = defineStore("login", {
   actions: {
     // actions 支持异步操作
     loginAccountAction(account: { name: string; password: string }) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         // 这里是post请求
-        let response: IData = {
+        const response: IData = {
           status: 0,
           data: {
             name: "liu",

@@ -30,9 +30,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
 import router from "../router"
-import useLoginStore from "../store/Login/login"
+import useLoginStore from "@/store/login.ts"
 // 定义props接收属性
 defineProps({
   isCollapse: {

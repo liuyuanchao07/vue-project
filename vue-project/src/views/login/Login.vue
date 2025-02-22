@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import LoginPanel from "@/views/login/Login.vue"
+import LoginPanel from "@/views/login/loginPanel.vue"
 </script>
 
 <style lang="less" scoped>

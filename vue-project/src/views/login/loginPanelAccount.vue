@@ -21,7 +21,7 @@
 import { reactive, ref } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
-import useLoginStore from "../../store/Login/login"
+import useLoginStore from "@/store/login.ts"
 const accountFromRef = ref<FormInstance>()
 const loginStore = useLoginStore()
 const accountForm = reactive({
@@ -49,7 +49,7 @@ const loginAction = (flag: boolean) => {
   accountFromRef.value.validate((valid) => {
     if (valid) {
       const { name, password } = accountForm
-      loginStore.loginAccountAction({ name, password }).then((res) => {
+      loginStore.loginAccountAction({ name, password }).then(() => {
         // 判断是否记住密码(方法1 方法2是watch)
         // localStorage.setItem("loginFlag", String(flag))
         if (flag) {
