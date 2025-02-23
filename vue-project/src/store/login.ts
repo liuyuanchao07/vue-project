@@ -22,7 +22,7 @@ const useLoginStore = defineStore("login", {
   }),
   actions: {
     // actions 支持异步操作
-    loginAccountAction(account: { name: string; password: string }) {
+    loginAccountAction() {
       return new Promise((resolve) => {
         // 这里是post请求
         const response: IData = {

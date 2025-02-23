@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router"
 
+// 此方法可以判断当前环境是开发还是生产环境
+console.log(import.meta.env.VITE_MODE)
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
