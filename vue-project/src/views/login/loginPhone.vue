@@ -1,13 +1,13 @@
 <template>
   <div class="phone">
-    <el-form label-width="70px" :model="phoneRuleForm" :rules="rules">
+    <el-form ref="phoneFormRef" label-width="70px" :model="phoneRuleForm" :rules="rules">
       <el-form-item label="手机号" prop="phone">
         <el-input placeholder="请输入手机号" v-model="phoneRuleForm.phone" />
       </el-form-item>
       <el-form-item label="验证码" prop="validateCode">
         <el-input placeholder="请输入验证码" v-model="phoneRuleForm.validateCode">
           <template #append>
-            <el-button>验证码</el-button>
+            <el-button @click="receiveValidateCode">{{ validateCode.validText }}</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -16,8 +16,13 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, defineExpose } from "vue"
-import type { FormRules } from "element-plus"
+import { reactive, ref, defineExpose } from "vue"
+import type { FormInstance, FormRules } from "element-plus"
+import useLoginStore from "@/store/login"
+import { getValidateCode } from "@/service/request"
+import { ElLoading } from "element-plus"
+const loginStore = useLoginStore()
+const phoneFormRef = ref<FormInstance>()
 
 interface phoneRuleForm {
   phone: string
@@ -27,6 +32,16 @@ interface phoneRuleForm {
 const phoneRuleForm = reactive<phoneRuleForm>({
   phone: "",
   validateCode: "",
+})
+
+const validateCode = reactive<{
+  validText: string
+  time: number
+  timer: null | number
+}>({
+  validText: "获取验证码",
+  time: 60,
+  timer: null,
 })
 
 const rules = reactive<FormRules<phoneRuleForm>>({
@@ -48,8 +63,41 @@ const rules = reactive<FormRules<phoneRuleForm>>({
   ],
 })
 
+const receiveValidateCode = () => {
+  if (validateCode.timer) return false
+  phoneFormRef.value.validateField("phone").then(() => {
+    const loading = ElLoading.service({
+      lock: true,
+      text: "Loading",
+      background: "rgba(0, 0, 0, 0.7)",
+    })
+    getValidateCode(phoneRuleForm.phone).then((result) => {
+      phoneRuleForm.validateCode = result.data.data.code
+    })
+    loading.close()
+    validateCode.timer = setInterval(() => {
+      validateCode.time -= 1
+      validateCode.validText = `剩余${validateCode.time}秒`
+      if (validateCode.time === 0) {
+        validateCode.time = 60
+        validateCode.validText = "获取验证码"
+        clearInterval(validateCode.timer)
+        validateCode.timer = null
+      }
+    }, 1000)
+  })
+}
+
 const loginPhone = () => {
-  console.log(222)
+  if (!phoneFormRef.value) return
+  phoneFormRef.value.validate((valid) => {
+    if (valid) {
+      // 获取用户输入的用户名和密码
+      const { phone, validateCode } = phoneRuleForm
+      // 向服务器发送网络请求
+      loginStore.phoneLoginAction(phone, validateCode)
+    }
+  })
 }
 
 defineExpose({

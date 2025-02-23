@@ -1,84 +1,58 @@
 import { defineStore } from "pinia"
 import router from "@/router/index"
-
-interface IData {
-  status: number
-  data: {
-    name: string
-    password: string
-    token: string
-  }
-}
-
-interface IState {
-  token: string
-  userMenus: any[]
-}
+import { accountLogin, phoneLogin } from "@/service/request"
+import { ElMessage, ElLoading } from "element-plus"
 
 const useLoginStore = defineStore("login", {
-  state: (): IState => ({
+  state: () => ({
     token: localStorage.getItem("token") ?? "",
-    userMenus: JSON.parse(localStorage.getItem("userMenus") as string) ?? [],
+    username: localStorage.getItem("username") ?? "",
+    id: localStorage.getItem("id") ?? "",
   }),
   actions: {
-    // actions 支持异步操作
-    loginAccountAction() {
-      return new Promise((resolve) => {
-        // 这里是post请求
-        const response: IData = {
-          status: 0,
-          data: {
-            name: "liu",
-            password: "12345",
-            token: "xxxuuahsuahsa",
-          },
-        }
-        resolve(response)
-      }).then((res: any) => {
-        this.token = res.data.token
-        localStorage.setItem("token", this.token)
-
-        // 这里还需要根据用户id去获取用户相信信息（主要是获取角色）
-        // 这个请求需要携带token 需要在请求拦截器里加请求头以及判断是否有token
-        this.userMenus = [
-          {
-            icon: "el-icon-monitor",
-            id: 1,
-            name: "系统总览",
-            sort: 1,
-            type: 1,
-            url: "/main/analysis/",
-            children: [
-              {
-                children: null,
-                id: 110,
-                name: "技术核心",
-                parentId: 1,
-                sort: 106,
-                type: 2,
-                url: "/main/analysis/overview",
-              },
-              {
-                children: null,
-                id: 111,
-                name: "商品统计",
-                parentId: 1,
-                sort: 107,
-                type: 3,
-                url: "/main/analysis/dashboard",
-              },
-            ],
-          },
-        ]
-        localStorage.setItem("userMenus", JSON.stringify(this.userMenus))
-        // 页面跳转
-        router.push({
-          name: "main",
-          params: {
-            userId: "123",
-          },
-        })
+    // 用户名密码登录
+    async accountLoginAction(username: string, password: string) {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Loading",
+        background: "rgba(0, 0, 0, 0.7)",
       })
+
+      const result = await accountLogin(username, password)
+      loading.close()
+      ElMessage({
+        message: "登录成功",
+        type: "success",
+      })
+      this.token = result.data.data.token
+      this.username = result.data.data.username
+      this.id = result.data.data.id
+      localStorage.setItem("token", this.token)
+      localStorage.setItem("username", this.username)
+      localStorage.setItem("id", this.id)
+      router.push("/main")
+    },
+    // 手机号登录
+    async phoneLoginAction(phoneNum: string, validateCode: string) {
+      const loading = ElLoading.service({
+        lock: true,
+        text: "Loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      })
+
+      const result = await phoneLogin(phoneNum, validateCode)
+      loading.close()
+      ElMessage({
+        message: "登录成功",
+        type: "success",
+      })
+      this.token = result.data.data.token
+      this.username = result.data.data.username
+      this.id = result.data.data.id
+      localStorage.setItem("token", this.token)
+      localStorage.setItem("username", this.username)
+      localStorage.setItem("id", this.id)
+      router.push("/main")
     },
   },
 })

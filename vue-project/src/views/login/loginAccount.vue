@@ -1,6 +1,6 @@
 <template>
   <div class="account">
-    <el-form label-width="70px" :model="accountRuleForm" :rules="rules">
+    <el-form ref="accountFormRef" label-width="70px" :model="accountRuleForm" :rules="rules">
       <el-form-item label="用户名" prop="username">
         <el-input placeholder="请输入用户名" v-model="accountRuleForm.username" />
       </el-form-item>
@@ -17,8 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, defineExpose } from "vue"
-import type { FormRules } from "element-plus"
+import { reactive, ref, defineExpose } from "vue"
+import type { FormInstance, FormRules } from "element-plus"
+import useLoginStore from "@/store/login"
+const loginStore = useLoginStore()
+const accountFormRef = ref<FormInstance>()
 
 interface accountRuleForm {
   username: string
@@ -39,7 +42,15 @@ const rules = reactive<FormRules<accountRuleForm>>({
 })
 
 const loginAccount = () => {
-  console.log(1111)
+  if (!accountFormRef.value) return
+  accountFormRef.value.validate((valid) => {
+    if (valid) {
+      // 获取用户输入的用户名和密码
+      const { username, password } = accountRuleForm
+      // 向服务器发送网络请求并且携带账号密码
+      loginStore.accountLoginAction(username, password)
+    }
+  })
 }
 
 defineExpose({
