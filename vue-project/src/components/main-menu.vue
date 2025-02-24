@@ -5,25 +5,34 @@
       <el-menu
         background-color="#001529"
         class="el-menu-vertical-demo"
-        default-active="110"
+        :default-active="loginStore.activeMenuId"
         text-color="#fff"
         :collapse="props.isCollapse"
       >
-        <el-sub-menu :index="String(item.id)" v-for="item in loginStore.userMenus" :key="item.id">
-          <template #title>
-            <el-icon><component :is="item.icon.split('el-icon')[1]" /></el-icon>
-            <span>{{ item.name }}</span>
+        <template v-for="item in loginStore.userMenus" :key="item.id">
+          <template v-if="item.children">
+            <el-sub-menu :index="String(item.id)" :key="item.id">
+              <template #title>
+                <el-icon><component :is="item.icon.split('el-icon')[1]" /></el-icon>
+                <span>{{ item.name }}</span>
+              </template>
+              <el-menu-item
+                @click="handleMenuClick(subItem)"
+                :index="String(subItem.id)"
+                v-for="subItem in item.children"
+                :key="subItem.id"
+              >
+                {{ subItem.name }}</el-menu-item
+              >
+            </el-sub-menu>
           </template>
-          <template v-if="`children` in item">
-            <el-menu-item
-              @click="handleMenuClick(subItem)"
-              :index="String(subItem.id)"
-              v-for="subItem in item.children"
-              :key="`${subItem.parentId}-${subItem.id}`"
-              >{{ subItem.name }}</el-menu-item
-            >
+          <template v-else>
+            <el-menu-item :index="String(item.id)" @click="handleMenuClick(item)">
+              <el-icon><component :is="item.icon.split('el-icon')[1]" /></el-icon>
+              <span>{{ item.name }}</span>
+            </el-menu-item>
           </template>
-        </el-sub-menu>
+        </template>
       </el-menu>
     </div>
   </div>
@@ -46,6 +55,7 @@ const loginStore = useLoginStore()
 
 const handleMenuClick = (item) => {
   router.push(item.url)
+  loginStore.setActiveMenuId(String(item.id))
 }
 </script>
 

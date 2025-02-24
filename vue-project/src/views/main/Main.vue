@@ -9,7 +9,6 @@
           <MainHeader @changeCollapse="changeCollapse" />
         </el-header>
         <el-main class="main_content">
-          1111
           <router-view></router-view>
         </el-main>
       </el-container>

@@ -51,6 +51,7 @@ const handleLogout = (command: string) => {
     localStorage.removeItem("id")
     localStorage.removeItem("user")
     localStorage.removeItem("userMenus")
+    localStorage.removeItem("activeMenuId")
     router.push("/login")
   }
 }

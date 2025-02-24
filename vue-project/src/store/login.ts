@@ -9,6 +9,7 @@ const useLoginStore = defineStore("login", {
     user: localStorage.getItem("user") ?? "",
     id: localStorage.getItem("id") ?? "",
     userMenus: JSON.parse(localStorage.getItem("userMenus") as string) ?? [],
+    activeMenuId: localStorage.getItem("activeMenuId") ?? "",
   }),
   actions: {
     // 用户名密码登录
@@ -34,6 +35,12 @@ const useLoginStore = defineStore("login", {
       // 根据详细信息返回用户菜单
       const userMenuResult = await getMenu(userInfoResult.data.data.id)
       this.userMenus = userMenuResult.data.data
+      if (this.userMenus[0].children) {
+        this.activeMenuId = String(this.userMenus[0].children[0].id)
+      } else {
+        this.activeMenuId = String(this.userMenus[0].id)
+      }
+      localStorage.setItem("activeMenuId", this.activeMenuId)
       localStorage.setItem("userMenus", JSON.stringify(userMenuResult.data.data))
 
       loading.close()
@@ -65,6 +72,11 @@ const useLoginStore = defineStore("login", {
       localStorage.setItem("user", this.user)
       localStorage.setItem("id", this.id)
       router.push("/main")
+    },
+    // 存储当前高亮menu的Id
+    setActiveMenuId(id: string) {
+      this.activeMenuId = id
+      localStorage.setItem("activeMenuId", this.activeMenuId)
     },
   },
 })

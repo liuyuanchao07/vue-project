@@ -17,6 +17,7 @@ const router = createRouter({
     {
       path: "/main/",
       component: () => import("@/views/main/main.vue"),
+      redirect: "/main/analysis/overview",
       children: [
         {
           path: "/main/analysis/overview",
@@ -31,8 +32,20 @@ const router = createRouter({
           component: () => import("@/views/main/system/user/index.vue"),
         },
         {
+          path: "/main/system/department",
+          component: () => import("@/views/main/system/department/index.vue"),
+        },
+        {
+          path: "/main/system/menu",
+          component: () => import("@/views/main/system/menu/index.vue"),
+        },
+        {
           path: "/main/system/role",
           component: () => import("@/views/main/system/role/index.vue"),
+        },
+        {
+          path: "/main/product",
+          component: () => import("@/views/main/product/index.vue"),
         },
       ],
     },
