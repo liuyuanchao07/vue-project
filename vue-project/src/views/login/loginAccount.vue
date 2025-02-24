@@ -29,8 +29,8 @@ interface accountRuleForm {
 }
 
 const accountRuleForm = reactive<accountRuleForm>({
-  username: "",
-  password: "",
+  username: localStorage.getItem("username") ?? "",
+  password: localStorage.getItem("password") ?? "",
 })
 
 const rules = reactive<FormRules<accountRuleForm>>({
@@ -41,20 +41,31 @@ const rules = reactive<FormRules<accountRuleForm>>({
   ],
 })
 
-const loginAccount = () => {
+const loginAccount = (rememberPassword) => {
   if (!accountFormRef.value) return
   accountFormRef.value.validate((valid) => {
     if (valid) {
       // 获取用户输入的用户名和密码
       const { username, password } = accountRuleForm
       // 向服务器发送网络请求并且携带账号密码
-      loginStore.accountLoginAction(username, password)
+      loginStore.accountLoginAction(username, password).then(() => {
+        if (rememberPassword) {
+          localStorage.setItem("username", accountRuleForm.username)
+          localStorage.setItem("password", accountRuleForm.password)
+          localStorage.setItem("rememberPassword", rememberPassword)
+        } else {
+          localStorage.removeItem("username")
+          localStorage.removeItem("password")
+          localStorage.removeItem("rememberPassword")
+        }
+      })
     }
   })
 }
 
 defineExpose({
   loginAccount,
+  accountRuleForm,
 })
 </script>
 

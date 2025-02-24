@@ -12,34 +12,34 @@ const router = createRouter({
     },
     {
       path: "/login",
-      component: () => import("../views/login/login.vue"),
+      component: () => import("@/views/login/login.vue"),
     },
     {
       path: "/main/",
-      component: () => import("../views/main/main.vue"),
+      component: () => import("@/views/main/main.vue"),
       children: [
         {
           path: "/main/analysis/overview",
-          component: () => import("../views/main/analysis/overview/index.vue"),
+          component: () => import("@/views/main/analysis/overview/index.vue"),
         },
         {
           path: "/main/analysis/dashboard",
-          component: () => import("../views/main/analysis/dashboard/index.vue"),
+          component: () => import("@/views/main/analysis/dashboard/index.vue"),
         },
         {
           path: "/main/system/user",
-          component: () => import("../views/main/system/user/index.vue"),
+          component: () => import("@/views/main/system/user/index.vue"),
         },
         {
           path: "/main/system/role",
-          component: () => import("../views/main/system/role/index.vue"),
+          component: () => import("@/views/main/system/role/index.vue"),
         },
       ],
     },
     {
       path: "/:pathMatch(.*)*",
       name: "NoFound",
-      component: () => import("../views/notFound/index.vue"),
+      component: () => import("@/views/notFound/index.vue"),
     },
   ],
 })
@@ -47,17 +47,14 @@ const router = createRouter({
 // 导航守卫
 // to:跳转到的位置 from:从哪来
 router.beforeEach((to) => {
-  if (to.path !== "/login") {
+  const token = localStorage.getItem("token")
+  if (to.path !== "/login" && !token) {
     // 只有登录成功才可以进入到main页面
-    if (!localStorage.getItem("token")) {
-      return "/login"
-    }
+    return "/login"
   }
 
-  if (to.path === "/login") {
-    if (localStorage.getItem("token")) {
-      return "/main"
-    }
+  if (to.path === "/login" && token) {
+    return "/main"
   }
 })
 

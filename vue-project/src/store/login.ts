@@ -6,7 +6,7 @@ import { ElMessage, ElLoading } from "element-plus"
 const useLoginStore = defineStore("login", {
   state: () => ({
     token: localStorage.getItem("token") ?? "",
-    username: localStorage.getItem("username") ?? "",
+    user: localStorage.getItem("user") ?? "",
     id: localStorage.getItem("id") ?? "",
   }),
   actions: {
@@ -25,10 +25,10 @@ const useLoginStore = defineStore("login", {
         type: "success",
       })
       this.token = result.data.data.token
-      this.username = result.data.data.username
+      this.user = result.data.data.user
       this.id = result.data.data.id
       localStorage.setItem("token", this.token)
-      localStorage.setItem("username", this.username)
+      localStorage.setItem("user", this.user)
       localStorage.setItem("id", this.id)
       router.push("/main")
     },
@@ -47,10 +47,10 @@ const useLoginStore = defineStore("login", {
         type: "success",
       })
       this.token = result.data.data.token
-      this.username = result.data.data.username
+      this.user = result.data.data.user
       this.id = result.data.data.id
       localStorage.setItem("token", this.token)
-      localStorage.setItem("username", this.username)
+      localStorage.setItem("user", this.user)
       localStorage.setItem("id", this.id)
       router.push("/main")
     },

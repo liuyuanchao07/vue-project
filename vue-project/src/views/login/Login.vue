@@ -38,14 +38,16 @@ import LoginAccount from "@/views/login/loginAccount.vue"
 import LoginPhone from "@/views/login/loginPhone.vue"
 import { ref } from "vue"
 import { throttle } from "lodash"
-const rememberPassword = ref<boolean>(false)
+const rememberPassword = ref<boolean>(
+  localStorage.getItem("rememberPassword") === "true" ? true : false,
+)
 const activePanel = ref<string>("account")
 const accountRef = ref<InstanceType<typeof LoginAccount>>()
 const phoneRef = ref<InstanceType<typeof LoginPhone>>()
 
 const handleLogin = throttle(() => {
   if (activePanel.value === "account") {
-    accountRef.value.loginAccount()
+    accountRef.value.loginAccount(rememberPassword.value)
   } else {
     phoneRef.value.loginPhone()
   }
