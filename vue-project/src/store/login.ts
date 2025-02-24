@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
-import router from "@/router/index"
+import router from "@/router"
+import { addRoutesfromMenu, firstMenu } from "@/utils"
 import { accountLogin, phoneLogin, getUserInfo, getMenu } from "@/service/request"
 import { ElMessage, ElLoading } from "element-plus"
 
@@ -12,7 +13,7 @@ const useLoginStore = defineStore("login", {
     activeMenuId: localStorage.getItem("activeMenuId") ?? "",
   }),
   actions: {
-    // 用户名密码登录
+    // 1. 用户名密码登录
     async accountLoginAction(username: string, password: string) {
       const loading = ElLoading.service({
         lock: true,
@@ -29,10 +30,10 @@ const useLoginStore = defineStore("login", {
       localStorage.setItem("user", this.user)
       localStorage.setItem("id", this.id)
 
-      // 获取登录用户的详细信息
+      // 2. 获取登录用户的详细信息
       const userInfoResult = await getUserInfo(loginResult.data.data.id)
 
-      // 根据详细信息返回用户菜单
+      // 3. 根据详细信息返回用户菜单
       const userMenuResult = await getMenu(userInfoResult.data.data.id)
       this.userMenus = userMenuResult.data.data
       if (this.userMenus[0].children) {
@@ -43,13 +44,16 @@ const useLoginStore = defineStore("login", {
       localStorage.setItem("activeMenuId", this.activeMenuId)
       localStorage.setItem("userMenus", JSON.stringify(userMenuResult.data.data))
 
+      // 4. 生成动态路由
+      addRoutesfromMenu(this.userMenus)
+
       loading.close()
       ElMessage({
         message: "登录成功",
         type: "success",
       })
 
-      router.push("/main")
+      router.push(firstMenu[0].path)
     },
     // 手机号登录
     async phoneLoginAction(phoneNum: string, validateCode: string) {

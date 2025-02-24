@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
+import { addRoutesfromMenu } from "@/utils"
+import { firstMenu } from "@/utils/index"
 
 // 此方法可以判断当前环境是开发还是生产环境
 console.log(import.meta.env.VITE_MODE)
@@ -15,40 +17,9 @@ const router = createRouter({
       component: () => import("@/views/login/login.vue"),
     },
     {
-      path: "/main/",
+      path: "/main",
       name: "main",
       component: () => import("@/views/main/main.vue"),
-      redirect: "/main/analysis/overview",
-      children: [
-        {
-          path: "/main/analysis/overview",
-          component: () => import("@/views/main/analysis/overview/index.vue"),
-        },
-        {
-          path: "/main/analysis/dashboard",
-          component: () => import("@/views/main/analysis/dashboard/index.vue"),
-        },
-        {
-          path: "/main/system/user",
-          component: () => import("@/views/main/system/user/index.vue"),
-        },
-        {
-          path: "/main/system/department",
-          component: () => import("@/views/main/system/department/index.vue"),
-        },
-        {
-          path: "/main/system/menu",
-          component: () => import("@/views/main/system/menu/index.vue"),
-        },
-        {
-          path: "/main/system/role",
-          component: () => import("@/views/main/system/role/index.vue"),
-        },
-        {
-          path: "/main/product",
-          component: () => import("@/views/main/product/index.vue"),
-        },
-      ],
     },
     {
       path: "/:pathMatch(.*)*",
@@ -60,8 +31,8 @@ const router = createRouter({
 
 // 导航守卫
 // to:跳转到的位置 from:从哪来
-router.beforeEach((to) => {
-  const token = localStorage.getItem("token")
+router.beforeEach((to, from) => {
+  const token: string | null = localStorage.getItem("token")
   if (to.path !== "/login" && !token) {
     // 只有登录成功才可以进入到main页面
     return "/login"
@@ -70,20 +41,14 @@ router.beforeEach((to) => {
   if (to.path === "/login" && token) {
     return "/main"
   }
+
+  if (/^\/main(\/)?$/.test(to.path) && from.path !== "/login") {
+    return firstMenu[0].path
+  }
 })
 
 export default router
-/*
-  动态路由 根据用户的权限信息 动态的添加路由 （而不是一次性的注册所有的路由）
 
-  第一种方式 基于角色动态路由管理
-  但是有弊端：每增加一个角色都要增加key/value 所有最好由后端返回
-  const role = {
-    "superadmin": [所有的路由] => router.main.children
-    "admin": [一部分路由] => router.main.children
-    "service": [少部分路由] => router.main.children
-  }
-
-  第二种方式 把取得的动态菜单映射成动态路由
-  常用
-*/
+// 解决刷新后动态路由消失的问题
+const menus = JSON.parse(localStorage.getItem("userMenus") as string) ?? []
+addRoutesfromMenu(menus)

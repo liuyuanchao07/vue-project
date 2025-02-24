@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios"
-import router from "@/router/index"
+import router from "@/router"
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: "http://192.168.0.138:5000",

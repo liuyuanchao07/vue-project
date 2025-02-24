@@ -55,7 +55,6 @@ const loginStore = useLoginStore()
 
 const handleMenuClick = (item) => {
   router.push(item.url)
-  loginStore.setActiveMenuId(String(item.id))
 }
 </script>
 

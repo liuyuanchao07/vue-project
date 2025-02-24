@@ -1,7 +1,10 @@
 <template>
   <div class="header">
-    <div class="header_collapse" @click="collapseChange">
-      <el-icon><component :is="collapse ? 'Expand' : 'Fold'" /></el-icon>
+    <div class="header_left">
+      <div class="header_collapse" @click="collapseChange">
+        <el-icon><component :is="collapse ? 'Expand' : 'Fold'" /></el-icon>
+      </div>
+      <Breadcrumb />
     </div>
     <div class="header_info">
       <div class="header_icon">
@@ -36,12 +39,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from "vue"
-import { useRouter } from "vue-router"
+import Breadcrumb from "@/components/main-breadcrumb.vue"
+import { ref, watch, defineEmits } from "vue"
+import { useRouter, useRoute } from "vue-router"
 import useLoginStore from "@/store/login"
 const loginStore = useLoginStore()
 const router = useRouter()
+const route = useRoute()
 const collapse = ref<boolean>(false)
+
+watch(
+  route,
+  (val) => {
+    console.log(val)
+    let activeMenuId = ""
+    loginStore.userMenus.forEach((item) => {
+      if (item.children) {
+        item.children.forEach((child) => {
+          if (val.path === child.url) {
+            activeMenuId = child.id
+          }
+        })
+      } else {
+        if (val.path === item.url) {
+          activeMenuId = item.id
+        }
+      }
+    })
+    loginStore.setActiveMenuId(String(activeMenuId))
+  },
+  {
+    immediate: true,
+  },
+)
 
 const emit = defineEmits(["changeCollapse"])
 
@@ -69,6 +99,11 @@ const collapseChange = () => {
   justify-content: space-between;
   align-items: center;
 
+  &_left {
+    display: flex;
+    align-items: center;
+  }
+
   &_info {
     display: flex;
     align-items: center;
@@ -77,6 +112,7 @@ const collapseChange = () => {
   &_collapse {
     line-height: 0;
     cursor: pointer;
+    margin-right: 20px;
   }
 
   &_icon {
