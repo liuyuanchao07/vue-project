@@ -4,7 +4,7 @@
       <div class="header_collapse" @click="collapseChange">
         <el-icon><component :is="collapse ? 'Expand' : 'Fold'" /></el-icon>
       </div>
-      <Breadcrumb />
+      <Breadcrumb :breadcrumb="breadcrumb" />
     </div>
     <div class="header_info">
       <div class="header_icon">
@@ -48,30 +48,7 @@ const router = useRouter()
 const route = useRoute()
 const collapse = ref<boolean>(false)
 
-watch(
-  route,
-  (val) => {
-    console.log(val)
-    let activeMenuId = ""
-    loginStore.userMenus.forEach((item) => {
-      if (item.children) {
-        item.children.forEach((child) => {
-          if (val.path === child.url) {
-            activeMenuId = child.id
-          }
-        })
-      } else {
-        if (val.path === item.url) {
-          activeMenuId = item.id
-        }
-      }
-    })
-    loginStore.setActiveMenuId(String(activeMenuId))
-  },
-  {
-    immediate: true,
-  },
-)
+const breadcrumb = ref([])
 
 const emit = defineEmits(["changeCollapse"])
 
@@ -90,6 +67,44 @@ const collapseChange = () => {
   collapse.value = !collapse.value
   emit("changeCollapse", collapse.value)
 }
+
+watch(
+  route,
+  (val) => {
+    // 记录当前选择的侧边栏的Id以及面包屑导航
+    let activeMenuId = ""
+    const breadcrumbList = []
+    loginStore.userMenus.forEach((item) => {
+      if (item.children) {
+        item.children.forEach((child) => {
+          if (val.path === child.url) {
+            activeMenuId = child.id
+            breadcrumbList.push({
+              name: item.name,
+              url: item.children[0].url,
+            })
+            breadcrumbList.push({
+              name: child.name,
+            })
+          }
+        })
+      } else {
+        if (val.path === item.url) {
+          activeMenuId = item.id
+          breadcrumbList.push({
+            name: item.name,
+          })
+        }
+      }
+    })
+    console.log(breadcrumbList)
+    loginStore.setActiveMenuId(String(activeMenuId))
+    breadcrumb.value = breadcrumbList
+  },
+  {
+    immediate: true,
+  },
+)
 </script>
 
 <style lang="less" scoped>
@@ -112,7 +127,7 @@ const collapseChange = () => {
   &_collapse {
     line-height: 0;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 15px;
   }
 
   &_icon {
