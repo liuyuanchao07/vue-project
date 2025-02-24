@@ -34,3 +34,14 @@ export const phoneLogin = (phoneNum: string, validateCode: string) => {
     },
   })
 }
+
+// 查询用户的详细信息
+export const getUserInfo = (id: number) => {
+  return axiosInstance({
+    method: "get",
+    url: "/users",
+    params: {
+      id,
+    },
+  })
+}
