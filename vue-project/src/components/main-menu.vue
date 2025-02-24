@@ -1,13 +1,13 @@
 <template>
-  <div class="main-menu">
-    <div class="logo">LOGO</div>
+  <div class="menu">
+    <div class="logo" v-show="!props.isCollapse">后台管理系统</div>
     <div class="menu">
       <el-menu
-        background-color="transparent"
+        background-color="#001529"
         class="el-menu-vertical-demo"
         default-active="110"
         text-color="#fff"
-        :collapse="isCollapse"
+        :collapse="props.isCollapse"
       >
         <el-sub-menu :index="String(item.id)" v-for="item in loginStore.userMenus" :key="item.id">
           <template #title>
@@ -30,10 +30,13 @@
 </template>
 
 <script setup lang="ts">
-import router from "../router"
-import useLoginStore from "@/store/login.ts"
+import { useRouter } from "vue-router"
+import useLoginStore from "@/store/login"
+
+const router = useRouter()
+
 // 定义props接收属性
-defineProps({
+const props = defineProps({
   isCollapse: {
     type: Boolean,
     default: false,
@@ -48,11 +51,12 @@ const handleMenuClick = (item) => {
 
 <style lang="less" scoped>
 .logo {
-  height: 60px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
+  font-size: 16px;
 }
 
 .el-menu {

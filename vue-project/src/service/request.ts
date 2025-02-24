@@ -45,3 +45,14 @@ export const getUserInfo = (id: number) => {
     },
   })
 }
+
+// 获取用户菜单
+export const getMenu = (id: number) => {
+  return axiosInstance({
+    method: "get",
+    url: "/getMenu",
+    params: {
+      id,
+    },
+  })
+}

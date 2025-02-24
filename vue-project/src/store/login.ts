@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import router from "@/router/index"
-import { accountLogin, phoneLogin, getUserInfo } from "@/service/request"
+import { accountLogin, phoneLogin, getUserInfo, getMenu } from "@/service/request"
 import { ElMessage, ElLoading } from "element-plus"
 
 const useLoginStore = defineStore("login", {
@@ -8,6 +8,7 @@ const useLoginStore = defineStore("login", {
     token: localStorage.getItem("token") ?? "",
     user: localStorage.getItem("user") ?? "",
     id: localStorage.getItem("id") ?? "",
+    userMenus: JSON.parse(localStorage.getItem("userMenus") as string) ?? [],
   }),
   actions: {
     // 用户名密码登录
@@ -29,7 +30,11 @@ const useLoginStore = defineStore("login", {
 
       // 获取登录用户的详细信息
       const userInfoResult = await getUserInfo(loginResult.data.data.id)
-      console.log(userInfoResult)
+
+      // 根据详细信息返回用户菜单
+      const userMenuResult = await getMenu(userInfoResult.data.data.id)
+      this.userMenus = userMenuResult.data.data
+      localStorage.setItem("userMenus", JSON.stringify(userMenuResult.data.data))
 
       loading.close()
       ElMessage({
