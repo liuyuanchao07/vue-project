@@ -16,7 +16,7 @@ import { useRouter } from "vue-router"
 const router = useRouter()
 
 const returnHomePage = () => {
-  router.push("/main")
+  router.back()
 }
 </script>
 

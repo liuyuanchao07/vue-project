@@ -1,7 +1,5 @@
 <template>
-  <div class="home">
-    <h2>dash</h2>
-  </div>
+  <div class="home">dashboard</div>
 </template>
 
 <script setup lang="ts"></script>
