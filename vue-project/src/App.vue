@@ -1,8 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue"
+import { ElConfigProvider } from "element-plus"
+import zhCn from "element-plus/dist/locale/zh-cn.mjs"
+const locale = ref(zhCn)
+</script>
 
 <template>
   <div class="app">
-    <RouterView />
+    <el-config-provider :locale="locale">
+      <RouterView />
+    </el-config-provider>
   </div>
 </template>
 

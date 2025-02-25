@@ -97,7 +97,6 @@ watch(
         }
       }
     })
-    console.log(breadcrumbList)
     loginStore.setActiveMenuId(String(activeMenuId))
     breadcrumb.value = breadcrumbList
   },

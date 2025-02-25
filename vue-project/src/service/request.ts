@@ -56,3 +56,18 @@ export const getMenu = (id: number) => {
     },
   })
 }
+
+// 获取用户列表
+export const getUsers = (params: {
+  username: string
+  realname: string
+  phone: string
+  state: string
+  createDate: string[]
+}) => {
+  return axiosInstance({
+    method: "get",
+    url: "/getUsers",
+    params,
+  })
+}
