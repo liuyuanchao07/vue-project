@@ -2,7 +2,7 @@
   <el-card class="content">
     <div class="content_header">
       <div class="content_title">用户列表</div>
-      <el-button type="primary" icon="Plus">新建用户</el-button>
+      <el-button @click="addUser" type="primary" icon="Plus">新建用户</el-button>
     </div>
     <el-table :data="props.userList" style="width: 100%">
       <el-table-column align="center" prop="name" label="姓名" width="120" />
@@ -60,7 +60,7 @@ const pageSize = ref(10)
 
 const props = defineProps(["totalCount", "userList"])
 
-const emit = defineEmits(["handleSizeChange", "handleCurrentChange"])
+const emit = defineEmits(["handleSizeChange", "handleCurrentChange", "handleModelShow"])
 
 const handleSizeChange = throttle(() => {
   emit("handleSizeChange", pageSize.value)
@@ -72,7 +72,11 @@ const handleCurrentChange = throttle(() => {
 
 const deleteRecord = throttle((id) => {
   console.log(id)
-})
+}, 1000)
+
+const addUser = throttle(() => {
+  emit("handleModelShow")
+}, 1000)
 </script>
 
 <style lang="less" scoped>
