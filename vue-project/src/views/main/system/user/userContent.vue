@@ -27,7 +27,9 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="130">
         <template #default="scope">
-          <el-button icon="Edit" type="primary" size="small" link>编辑</el-button>
+          <el-button @click="editRecord(scope.row)" icon="Edit" type="primary" size="small" link
+            >编辑</el-button
+          >
           <el-popconfirm title="确定要删除当前记录吗" @confirm="deleteRecord(scope.row.id)">
             <template #reference>
               <el-button icon="Delete" type="danger" size="small" link>删除</el-button>
@@ -76,6 +78,10 @@ const deleteRecord = throttle((id) => {
 
 const addUser = throttle(() => {
   emit("handleModelShow")
+}, 1000)
+
+const editRecord = throttle((record) => {
+  emit("handleModelShow", record)
 }, 1000)
 </script>
 

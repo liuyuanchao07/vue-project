@@ -47,8 +47,8 @@ const handleCurrentChange = (currentPage) => {
   requestApi()
 }
 
-const handleModelShow = () => {
-  modelRef.value.changeModelState()
+const handleModelShow = (record = "") => {
+  modelRef.value.changeModelState(record)
 }
 
 const handleSearch = (params) => {
