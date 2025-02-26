@@ -9,9 +9,18 @@
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="80px">
       <template v-for="item in props.modelConfig.formItems" :key="item.name">
         <template v-if="item.type === 'input'">
-          <el-form-item :label="item.label" :prop="item.prop" :placeholder="item.placeholder">
-            <el-input v-model.trim="ruleForm[item.prop]" />
-          </el-form-item>
+          <template v-if="item.prop === 'password'">
+            <template v-if="isNewRecord">
+              <el-form-item :label="item.label" :prop="item.prop" :placeholder="item.placeholder">
+                <el-input v-model.trim="ruleForm[item.prop]" />
+              </el-form-item>
+            </template>
+          </template>
+          <template v-else>
+            <el-form-item :label="item.label" :prop="item.prop" :placeholder="item.placeholder">
+              <el-input v-model.trim="ruleForm[item.prop]" />
+            </el-form-item>
+          </template>
         </template>
         <template v-if="item.type === 'select'">
           <template v-if="item.prop === 'roleId'">
