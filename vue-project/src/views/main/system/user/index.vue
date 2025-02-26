@@ -12,7 +12,7 @@
       :totalCount="totalCount"
       :userList="userList"
     />
-    <UserModel ref="modelRef" />
+    <UserModel ref="modelRef" :modelConfig="modelConfig" />
   </div>
 </template>
 
@@ -24,6 +24,7 @@ import UserSearch from "@/views/main/system/user/userSearch.vue"
 import UserContent from "@/views/main/system/user/userContent.vue"
 import UserModel from "@/views/main/system/user/userModel.vue"
 import searchConfig from "@/config/user-search"
+import modelConfig from "@/config/user-model"
 
 const totalCount = ref(0)
 const userList = ref([])

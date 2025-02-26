@@ -2,43 +2,44 @@
   <el-dialog
     center
     width="400"
-    :title="isNewRecord ? '新建用户' : '编辑用户'"
+    :title="isNewRecord ? props.modelConfig.newTitle : props.modelConfig.editTitle"
     v-model="modelState"
     @closed="closeModel"
   >
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="80px">
-      <el-form-item label="用户名" prop="name" placeholder="请输入用户名">
-        <el-input v-model.trim="ruleForm.name" />
-      </el-form-item>
-      <el-form-item label="真实姓名" prop="realname" placeholder="请输入真实姓名">
-        <el-input v-model.trim="ruleForm.realname" />
-      </el-form-item>
-      <el-form-item v-if="isNewRecord" label="密码" prop="password" placeholder="请输入密码">
-        <el-input v-model.trim="ruleForm.password" />
-      </el-form-item>
-      <el-form-item label="电话号码" prop="cellphone" placeholder="请输入电话号码">
-        <el-input v-model.trim="ruleForm.cellphone" />
-      </el-form-item>
-      <el-form-item label="选择角色" prop="roleId">
-        <el-select v-model="ruleForm.roleId" placeholder="请选择一个角色">
-          <el-option
-            v-for="item in roleList"
-            :label="item.label"
-            :value="item.value"
-            :key="item.label"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="选择部门" prop="department">
-        <el-select v-model="ruleForm.departmentId" placeholder="请选择一个部门">
-          <el-option
-            v-for="item in departmenetList"
-            :label="item.label"
-            :value="item.value"
-            :key="item.label"
-          />
-        </el-select>
-      </el-form-item>
+      <template v-for="item in props.modelConfig.formItems" :key="item.name">
+        <template v-if="item.type === 'input'">
+          <el-form-item :label="item.label" :prop="item.prop" :placeholder="item.placeholder">
+            <el-input v-model.trim="ruleForm[item.prop]" />
+          </el-form-item>
+        </template>
+        <template v-if="item.type === 'select'">
+          <template v-if="item.prop === 'roleId'">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <el-select v-model="ruleForm[item.prop]" :placeholder="item.placeholder">
+                <el-option
+                  v-for="item in roleList"
+                  :label="item.label"
+                  :value="item.value"
+                  :key="item.label"
+                />
+              </el-select>
+            </el-form-item>
+          </template>
+          <template v-if="item.prop === 'departmentId'">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <el-select v-model="ruleForm[item.prop]" :placeholder="item.placeholder">
+                <el-option
+                  v-for="item in departmenetList"
+                  :label="item.label"
+                  :value="item.value"
+                  :key="item.label"
+                />
+              </el-select>
+            </el-form-item>
+          </template>
+        </template>
+      </template>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -50,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineExpose, ref, reactive, onMounted } from "vue"
+import { defineExpose, ref, reactive, onMounted, defineProps } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import { getRoleList, getDepartmentList } from "@/service/request"
 
@@ -59,6 +60,8 @@ const ruleFormRef = ref<FormInstance>()
 const isNewRecord = ref(false)
 const roleList = ref([])
 const departmenetList = ref([])
+
+const props = defineProps(["modelConfig"])
 
 interface RuleForm {
   name: string
