@@ -67,7 +67,7 @@ const userForm = reactive({
   realname: "",
   cellphone: "",
   state: "",
-  createDate: [],
+  createDate: "",
 })
 
 const emit = defineEmits(["handleSearch", "handleReset"])
