@@ -11,6 +11,7 @@
       @handleModelShow="handleModelShow"
       :totalCount="totalCount"
       :userList="userList"
+      :contextConfig="contextConfig"
     />
     <UserModel ref="modelRef" :modelConfig="modelConfig" />
   </div>
@@ -25,6 +26,7 @@ import UserContent from "@/views/main/system/user/userContent.vue"
 import UserModel from "@/views/main/system/user/userModel.vue"
 import searchConfig from "@/config/user-search"
 import modelConfig from "@/config/user-model"
+import contextConfig from "@/config/user-context"
 
 const totalCount = ref(0)
 const userList = ref([])
