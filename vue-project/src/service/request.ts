@@ -71,3 +71,19 @@ export const getUsers = (params: {
     params,
   })
 }
+
+// 获取角色菜单
+export const getRoleList = () => {
+  return axiosInstance({
+    method: "get",
+    url: "/getRoleList",
+  })
+}
+
+// 获取部门菜单
+export const getDepartmentList = () => {
+  return axiosInstance({
+    method: "get",
+    url: "/getDepartmenetList",
+  })
+}
