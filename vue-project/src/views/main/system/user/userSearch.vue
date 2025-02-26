@@ -2,41 +2,41 @@
   <el-card class="search">
     <el-form :model="userForm" ref="userFormRef" label-width="80px">
       <el-row :gutter="80">
-        <el-col :span="8">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model.trim="userForm.name" placeholder="请输入查询的用户名" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model.trim="userForm.realname" placeholder="请输入查询的真实姓名" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model.trim="userForm.cellphone" placeholder="请输入查询的手机号码" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="80">
-        <el-col :span="8">
-          <el-form-item label="状态" prop="state">
-            <el-select v-model="userForm.state" placeholder="请选择查询的状态">
-              <el-option label="启用" :value="1" />
-              <el-option label="禁用" :value="0" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="创建时间" prop="createDate">
-            <el-date-picker
-              v-model="userForm.createDate"
-              type="daterange"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-            />
-          </el-form-item>
-        </el-col>
+        <template v-for="item in props.searchConfig.formItems" :key="item.name">
+          <template v-if="item.type === 'input'">
+            <el-col :span="8">
+              <el-form-item :label="item.label" :prop="item.name">
+                <el-input v-model.trim="userForm[item.prop]" :placeholder="item.placeholder" />
+              </el-form-item>
+            </el-col>
+          </template>
+          <template v-if="item.type === 'select'">
+            <el-col :span="8">
+              <el-form-item :label="item.label" :prop="item.name">
+                <el-select v-model="userForm[item.prop]" :placeholder="item.placeholder">
+                  <el-option
+                    :key="option.value"
+                    v-for="option in item.options"
+                    :label="option.label"
+                    :value="option.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </template>
+          <template v-if="item.type === 'date-picker'">
+            <el-col :span="8">
+              <el-form-item :label="item.label" :prop="item.name">
+                <el-date-picker
+                  v-model="userForm[item.prop]"
+                  type="daterange"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                />
+              </el-form-item>
+            </el-col>
+          </template>
+        </template>
       </el-row>
       <el-row :gutter="80">
         <el-col :span="24">
@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, defineEmits } from "vue"
+import { reactive, ref, defineEmits, defineProps } from "vue"
 import type { FormInstance } from "element-plus"
 import { throttle } from "lodash"
 import dayjs from "dayjs"
@@ -61,6 +61,8 @@ import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
 
 const userFormRef = ref<FormInstance>()
+
+const props = defineProps(["searchConfig"])
 
 const userForm = reactive({
   name: "",

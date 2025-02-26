@@ -1,6 +1,10 @@
 <template>
   <div class="user">
-    <UserSearch @handleSearch="handleSearch" @handleReset="handleReset" />
+    <UserSearch
+      :searchConfig="searchConfig"
+      @handleSearch="handleSearch"
+      @handleReset="handleReset"
+    />
     <UserContent
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
@@ -19,6 +23,7 @@ import { ElLoading } from "element-plus"
 import UserSearch from "@/views/main/system/user/userSearch.vue"
 import UserContent from "@/views/main/system/user/userContent.vue"
 import UserModel from "@/views/main/system/user/userModel.vue"
+import searchConfig from "@/config/user-search"
 
 const totalCount = ref(0)
 const userList = ref([])
