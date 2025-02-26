@@ -1,17 +1,23 @@
 <template>
-  <el-dialog center width="400" title="新建用户" v-model="modelState" @closed="closeModel">
+  <el-dialog
+    center
+    width="400"
+    :title="isNewRecord ? '新建用户' : '编辑用户'"
+    v-model="modelState"
+    @closed="closeModel"
+  >
     <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="80px">
       <el-form-item label="用户名" prop="name" placeholder="请输入用户名">
-        <el-input v-model="ruleForm.name" />
+        <el-input v-model.trim="ruleForm.name" />
       </el-form-item>
       <el-form-item label="真实姓名" prop="realname" placeholder="请输入真实姓名">
-        <el-input v-model="ruleForm.realname" />
+        <el-input v-model.trim="ruleForm.realname" />
       </el-form-item>
       <el-form-item v-if="isNewRecord" label="密码" prop="password" placeholder="请输入密码">
-        <el-input v-model="ruleForm.password" />
+        <el-input v-model.trim="ruleForm.password" />
       </el-form-item>
       <el-form-item label="电话号码" prop="cellphone" placeholder="请输入电话号码">
-        <el-input v-model="ruleForm.cellphone" />
+        <el-input v-model.trim="ruleForm.cellphone" />
       </el-form-item>
       <el-form-item label="选择角色" prop="roleId">
         <el-select v-model="ruleForm.roleId" placeholder="请选择一个角色">

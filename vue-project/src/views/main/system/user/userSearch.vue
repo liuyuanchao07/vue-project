@@ -4,17 +4,17 @@
       <el-row :gutter="80">
         <el-col :span="8">
           <el-form-item label="用户名" prop="name">
-            <el-input v-model="userForm.name" placeholder="请输入查询的用户名" />
+            <el-input v-model.trim="userForm.name" placeholder="请输入查询的用户名" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="真实姓名" prop="realname">
-            <el-input v-model="userForm.realname" placeholder="请输入查询的真实姓名" />
+            <el-input v-model.trim="userForm.realname" placeholder="请输入查询的真实姓名" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="手机号码" prop="cellphone">
-            <el-input v-model="userForm.cellphone" placeholder="请输入查询的手机号码" />
+            <el-input v-model.trim="userForm.cellphone" placeholder="请输入查询的手机号码" />
           </el-form-item>
         </el-col>
       </el-row>

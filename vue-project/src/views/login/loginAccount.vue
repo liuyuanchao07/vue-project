@@ -2,12 +2,12 @@
   <div class="account">
     <el-form ref="accountFormRef" label-width="70px" :model="accountRuleForm" :rules="rules">
       <el-form-item label="用户名" prop="username">
-        <el-input placeholder="请输入用户名" v-model="accountRuleForm.username" />
+        <el-input placeholder="请输入用户名" v-model.trim="accountRuleForm.username" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input
           placeholder="请输入密码"
-          v-model="accountRuleForm.password"
+          v-model.trim="accountRuleForm.password"
           show-password
           type="password"
         />

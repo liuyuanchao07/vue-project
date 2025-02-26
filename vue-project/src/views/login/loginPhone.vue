@@ -2,10 +2,10 @@
   <div class="phone">
     <el-form ref="phoneFormRef" label-width="70px" :model="phoneRuleForm" :rules="rules">
       <el-form-item label="手机号" prop="phone">
-        <el-input placeholder="请输入手机号" v-model="phoneRuleForm.phone" />
+        <el-input placeholder="请输入手机号" v-model.trim="phoneRuleForm.phone" />
       </el-form-item>
       <el-form-item label="验证码" prop="validateCode">
-        <el-input placeholder="请输入验证码" v-model="phoneRuleForm.validateCode">
+        <el-input placeholder="请输入验证码" v-model.trim="phoneRuleForm.validateCode">
           <template #append>
             <el-button @click="receiveValidateCode">{{ validateCode.validText }}</el-button>
           </template>
