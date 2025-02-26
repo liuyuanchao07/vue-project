@@ -17,25 +17,22 @@
       </el-table-column>
       <el-table-column align="center" prop="createAt" label="创建时间">
         <template #default="scope">
-          {{ dayjs.utc(scope.row.createAt).utcOffset(8).format("YYYY/MM/DD HH:mm:ss") }}
+          {{ formatDate(scope.row.createAt) }}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="updateAt" label="更新时间">
         <template #default="scope">
-          {{ dayjs.utc(scope.row.updateAt).utcOffset(8).format("YYYY/MM/DD HH:mm:ss") }}
+          {{ formatDate(scope.row.updateAt) }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="130">
         <template #default="scope">
           <el-button icon="Edit" type="primary" size="small" link>编辑</el-button>
-          <el-button
-            @click="deleteRecord(scope.row.id)"
-            icon="Delete"
-            type="danger"
-            size="small"
-            link
-            >删除</el-button
-          >
+          <el-popconfirm title="确定要删除当前记录吗" @confirm="deleteRecord(scope.row.id)">
+            <template #reference>
+              <el-button icon="Delete" type="danger" size="small" link>删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -57,9 +54,7 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits } from "vue"
 import { throttle } from "lodash"
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
+import formatDate from "@/utils/formatDate"
 const currentPage = ref(1)
 const pageSize = ref(10)
 
@@ -91,5 +86,9 @@ const deleteRecord = throttle((id) => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+:global(.el-popconfirm__main) {
+  font-size: 12px;
 }
 </style>
