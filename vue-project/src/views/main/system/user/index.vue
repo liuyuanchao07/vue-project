@@ -12,7 +12,28 @@
       :totalCount="totalCount"
       :userList="userList"
       :contextConfig="contextConfig"
-    />
+    >
+      <template #name="scope">{{ scope.row.name }}</template>
+      <template #realname="scope">{{ scope.row.realname }}</template>
+      <template #cellphone="scope">{{ scope.row.cellphone }}</template>
+      <template #enable="scope">
+        <el-tag :type="scope.row.enable === 1 ? 'success' : 'danger'">{{
+          scope.row.enable === 1 ? "启用" : "禁用"
+        }}</el-tag>
+      </template>
+      <template #createAt="scope">{{ formatDate(scope.row.createAt) }}</template>
+      <template #updateAt="scope">{{ formatDate(scope.row.updateAt) }}</template>
+      <template #button="scope">
+        <el-button @click="editRecord(scope.row)" icon="Edit" type="primary" size="small" link
+          >编辑</el-button
+        >
+        <el-popconfirm title="确定要删除当前记录吗" @confirm="deleteRecord(scope.row.id)">
+          <template #reference>
+            <el-button icon="Delete" type="danger" size="small" link>删除</el-button>
+          </template>
+        </el-popconfirm>
+      </template>
+    </UserContent>
     <UserModel ref="modelRef" :modelConfig="modelConfig" />
   </div>
 </template>
@@ -21,12 +42,14 @@
 import { onMounted, ref } from "vue"
 import { getUsers } from "@/service/request"
 import { ElLoading } from "element-plus"
+import formatDate from "@/utils/formatDate"
 import UserSearch from "@/views/main/system/user/userSearch.vue"
 import UserContent from "@/views/main/system/user/userContent.vue"
 import UserModel from "@/views/main/system/user/userModel.vue"
 import searchConfig from "@/config/user-search"
 import modelConfig from "@/config/user-model"
 import contextConfig from "@/config/user-context"
+import { throttle } from "lodash"
 
 const totalCount = ref(0)
 const userList = ref([])
@@ -67,6 +90,14 @@ const handleSearch = (params) => {
 const handleReset = () => {
   requestApi()
 }
+
+const deleteRecord = throttle((id) => {
+  console.log(id)
+}, 1000)
+
+const editRecord = throttle((record) => {
+  modelRef.value.changeModelState(record)
+}, 1000)
 
 onMounted(() => {
   requestApi()

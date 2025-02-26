@@ -39,6 +39,7 @@ const contextConfig = {
     {
       type: "button",
       label: "操作",
+      prop: "button",
     },
   ],
 }
