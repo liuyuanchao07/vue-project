@@ -34,13 +34,27 @@
         </el-popconfirm>
       </template>
     </UserContent>
-    <UserModel ref="modelRef" :modelConfig="modelConfig" />
+    <UserModel ref="modelRef" :modelConfig="modelConfig">
+      <template #treeList>
+        <el-tree
+          :data="permissionList"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[]"
+          :default-checked-keys="[]"
+          :props="{
+            children: 'children',
+            label: 'label',
+          }"
+        />
+      </template>
+    </UserModel>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import { getUsers } from "@/service/request"
+import { getUsers, getPermissionList } from "@/service/request"
 import { ElLoading } from "element-plus"
 import formatDate from "@/utils/formatDate"
 import UserSearch from "@/views/main/system/user/userSearch.vue"
@@ -53,6 +67,7 @@ import { throttle } from "lodash"
 
 const totalCount = ref(0)
 const userList = ref([])
+const permissionList = ref([])
 const modelRef = ref<Instancetype<typeof UserModel>>()
 
 const requestApi = () => {
@@ -101,5 +116,8 @@ const editRecord = throttle((record) => {
 
 onMounted(() => {
   requestApi()
+  getPermissionList().then((res) => {
+    permissionList.value = res.data.data
+  })
 })
 </script>

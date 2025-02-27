@@ -41,7 +41,7 @@ const pageSize = ref(10)
 
 const props = defineProps(["totalCount", "userList", "contextConfig"])
 
-const emit = defineEmits(["handleSizeChange", "handleCurrentChange"])
+const emit = defineEmits(["handleSizeChange", "handleCurrentChange", "handleModelShow"])
 
 const handleSizeChange = throttle(() => {
   emit("handleSizeChange", pageSize.value)

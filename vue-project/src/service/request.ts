@@ -87,3 +87,11 @@ export const getDepartmentList = () => {
     url: "/getDepartmenetList",
   })
 }
+
+// 获取权限列表
+export const getPermissionList = () => {
+  return axiosInstance({
+    method: "get",
+    url: "/getPermissionList",
+  })
+}

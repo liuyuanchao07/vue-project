@@ -51,6 +51,7 @@ declare module 'vue' {
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
+    ElTree: typeof import('element-plus/es')['ElTree']
     MainBreadcrumb: typeof import('./src/components/main-breadcrumb.vue')['default']
     MainHeader: typeof import('./src/components/main-header.vue')['default']
     MainMenu: typeof import('./src/components/main-menu.vue')['default']

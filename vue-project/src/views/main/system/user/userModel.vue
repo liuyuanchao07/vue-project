@@ -48,6 +48,9 @@
             </el-form-item>
           </template>
         </template>
+        <template v-if="item.type === 'treeList'">
+          <slot :name="item.type"></slot>
+        </template>
       </template>
     </el-form>
     <template #footer>
@@ -78,7 +81,6 @@ const departmenetList = ref([])
 //   roleId: string
 //   departmentId: string
 // }
-
 const props = defineProps(["modelConfig"])
 
 const ruleForm = reactive({})

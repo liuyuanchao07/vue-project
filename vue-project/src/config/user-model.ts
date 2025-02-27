@@ -38,6 +38,9 @@ const modelConfig = {
       prop: "departmentId",
       placeholder: "请选择一个部门",
     },
+    {
+      type: "treeList",
+    },
   ],
 }
 
