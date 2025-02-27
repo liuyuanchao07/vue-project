@@ -64,12 +64,10 @@ const userFormRef = ref<FormInstance>()
 
 const props = defineProps(["searchConfig"])
 
-const userForm = reactive({
-  name: "",
-  realname: "",
-  cellphone: "",
-  state: "",
-  createDate: "",
+const userForm = reactive({})
+
+props.searchConfig.formItems.forEach((item) => {
+  userForm[item.prop] = ""
 })
 
 const emit = defineEmits(["handleSearch", "handleReset"])

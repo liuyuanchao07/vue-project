@@ -8,7 +8,9 @@
     </div>
     <el-table :data="props.userList" style="width: 100%">
       <template v-for="item in contextConfig.tableList" :key="item.prop">
-        <el-table-column align="center" v-bind="item">
+        <el-table-column v-if="item.prop === 'selection'" align="center" v-bind="item" />
+        <el-table-column v-else-if="item.prop === 'index'" align="center" v-bind="item" />
+        <el-table-column v-else align="center" v-bind="item">
           <template #default="scope">
             <slot :name="item.prop" v-bind="scope"></slot>
           </template>

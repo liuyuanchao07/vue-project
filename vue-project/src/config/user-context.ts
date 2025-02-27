@@ -3,6 +3,18 @@ const contextConfig = {
   buttonTitle: "新建用户",
   tableList: [
     {
+      type: "selection",
+      label: "选择",
+      prop: "selection",
+      width: "80",
+    },
+    {
+      type: "index",
+      label: "序号",
+      prop: "index",
+      width: "80",
+    },
+    {
       type: "normal",
       label: "姓名",
       prop: "name",

@@ -70,24 +70,21 @@ const isNewRecord = ref(false)
 const roleList = ref([])
 const departmenetList = ref([])
 
+// interface RuleForm {
+//   name: string
+//   realname: string
+//   password: string
+//   cellphone: string
+//   roleId: string
+//   departmentId: string
+// }
+
 const props = defineProps(["modelConfig"])
 
-interface RuleForm {
-  name: string
-  realname: string
-  password: string
-  cellphone: string
-  roleId: string
-  departmentId: string
-}
+const ruleForm = reactive({})
 
-const ruleForm = reactive<RuleForm>({
-  name: "",
-  realname: "",
-  password: "",
-  cellphone: "",
-  roleId: "",
-  departmentId: "",
+props.modelConfig.formItems.forEach((item) => {
+  ruleForm[item.prop] = ""
 })
 
 const rules = reactive<FormRules<RuleForm>>({

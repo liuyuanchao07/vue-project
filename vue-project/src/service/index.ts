@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from "axios"
 import router from "@/router"
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: "http://192.168.0.104:5000",
+  baseURL: "http://192.168.0.100:5000",
   timeout: 10000,
 })
 
