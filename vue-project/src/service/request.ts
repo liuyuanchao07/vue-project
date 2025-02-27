@@ -95,3 +95,11 @@ export const getPermissionList = () => {
     url: "/getPermissionList",
   })
 }
+
+// 获取商品统计数据
+export const getStatisticData = () => {
+  return axiosInstance({
+    method: "get",
+    url: "/getStatisticData",
+  })
+}

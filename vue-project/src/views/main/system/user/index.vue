@@ -60,7 +60,6 @@
 <script setup lang="ts">
 import { onMounted, ref, nextTick } from "vue"
 import { getUsers, getPermissionList } from "@/service/request"
-import { ElLoading } from "element-plus"
 import formatDate from "@/utils/formatDate"
 import mapRecordToIds from "@/utils/mapRecordToIds"
 import UserSearch from "@/views/main/system/user/userSearch.vue"
