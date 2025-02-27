@@ -40,6 +40,7 @@ const modelConfig = {
     },
     {
       type: "treeList",
+      prop: "treeList",
     },
   ],
 }

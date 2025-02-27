@@ -34,14 +34,21 @@
         </el-popconfirm>
       </template>
     </UserContent>
-    <UserModel ref="modelRef" :modelConfig="modelConfig">
+    <UserModel
+      ref="modelRef"
+      :modelConfig="modelConfig"
+      :selectedPermissionId="selectedPermissionId"
+      @clearSelectedPermissionId="clearSelectedPermissionId"
+    >
       <template #treeList>
         <el-tree
+          ref="treeRef"
           :data="permissionList"
           show-checkbox
           node-key="id"
           :default-expanded-keys="[]"
-          :default-checked-keys="[]"
+          :default-checked-keys="selectedPermissionId"
+          @check="getCheckedKeys"
           :props="{
             children: 'children',
             label: 'label',
@@ -53,10 +60,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { onMounted, ref, nextTick } from "vue"
 import { getUsers, getPermissionList } from "@/service/request"
 import { ElLoading } from "element-plus"
 import formatDate from "@/utils/formatDate"
+import mapRecordToIds from "@/utils/mapRecordToIds"
 import UserSearch from "@/views/main/system/user/userSearch.vue"
 import UserContent from "@/views/main/system/user/userContent.vue"
 import UserModel from "@/views/main/system/user/userModel.vue"
@@ -68,6 +76,8 @@ import { throttle } from "lodash"
 const totalCount = ref(0)
 const userList = ref([])
 const permissionList = ref([])
+const selectedPermissionId = ref([])
+const treeRef = ref()
 const modelRef = ref<Instancetype<typeof UserModel>>()
 
 const requestApi = () => {
@@ -81,6 +91,14 @@ const requestApi = () => {
     userList.value = res.data.data
     loading.close()
   })
+}
+
+const clearSelectedPermissionId = () => {
+  selectedPermissionId.value = []
+}
+
+const getCheckedKeys = (node, state) => {
+  selectedPermissionId.value = [...state.checkedKeys, ...state.halfCheckedKeys]
 }
 
 const handleSizeChange = (pageSize) => {
@@ -112,6 +130,9 @@ const deleteRecord = throttle((id) => {
 
 const editRecord = throttle((record) => {
   modelRef.value.changeModelState(record)
+  nextTick(() => {
+    selectedPermissionId.value = mapRecordToIds(record)
+  })
 }, 1000)
 
 onMounted(() => {

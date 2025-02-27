@@ -2,6 +2,7 @@
   <el-dialog
     center
     width="400"
+    destroy-on-close
     :title="isNewRecord ? props.modelConfig.newTitle : props.modelConfig.editTitle"
     v-model="modelState"
     @closed="closeModel"
@@ -56,14 +57,14 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="closeModel">取消</el-button>
-        <el-button type="primary">确认</el-button>
+        <el-button @click="confirm" type="primary">确认</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { defineExpose, ref, reactive, onMounted, defineProps } from "vue"
+import { defineExpose, ref, reactive, onMounted, defineProps, defineEmits } from "vue"
 import type { FormInstance, FormRules } from "element-plus"
 import { getRoleList, getDepartmentList } from "@/service/request"
 
@@ -81,7 +82,8 @@ const departmenetList = ref([])
 //   roleId: string
 //   departmentId: string
 // }
-const props = defineProps(["modelConfig"])
+const props = defineProps(["modelConfig", "selectedPermissionId"])
+const emit = defineEmits(["clearSelectedPermissionId"])
 
 const ruleForm = reactive({})
 
@@ -108,12 +110,18 @@ const changeModelState = (record) => {
   }
 }
 
+const confirm = () => {
+  ruleForm.treeList = props.selectedPermissionId
+  console.log(ruleForm)
+}
+
 const closeModel = () => {
   modelState.value = false
   ruleFormRef.value.resetFields()
   for (const key in ruleForm) {
     ruleForm[key] = ""
   }
+  emit("clearSelectedPermissionId")
 }
 
 onMounted(async () => {
