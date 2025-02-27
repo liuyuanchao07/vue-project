@@ -46,8 +46,6 @@
           :data="permissionList"
           show-checkbox
           node-key="id"
-          :default-expanded-keys="[]"
-          :default-checked-keys="selectedPermissionId"
           @check="getCheckedKeys"
           :props="{
             children: 'children',
@@ -132,6 +130,7 @@ const editRecord = throttle((record) => {
   modelRef.value.changeModelState(record)
   nextTick(() => {
     selectedPermissionId.value = mapRecordToIds(record)
+    treeRef.value.setCheckedKeys(selectedPermissionId.value)
   })
 }, 1000)
 
