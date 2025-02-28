@@ -11,19 +11,17 @@
       <el-row :gutter="12">
         <el-col :span="7">
           <PieCard :option="optionPie">
-            <template #header>饼状图</template>
+            <template #header>分类商品数量(饼图)</template>
           </PieCard>
         </el-col>
         <el-col :span="10"
-          ><el-card>
-            <template #header>
-              <div class="card-header">卡片的头部标题</div>
-            </template>
-          </el-card></el-col
-        >
+          ><PieCard :option="optionColumnar">
+            <template #header>不同城市的商品销量</template>
+          </PieCard>
+        </el-col>
         <el-col :span="7">
           <PieCard :option="optionRose">
-            <template #header>玫瑰图</template>
+            <template #header>分类商品数量(玫瑰图)</template>
           </PieCard>
         </el-col>
       </el-row>
@@ -100,6 +98,23 @@ const optionRose: EChartsOption = {
       ],
     },
   ],
+}
+
+const optionColumnar: EChartsOption = {
+  legend: {},
+  tooltip: {},
+  dataset: {
+    source: [
+      ["city", "2022", "2023", "2024"],
+      ["大连", 43.3, 85.8, 93.7],
+      ["沈阳", 83.1, 73.4, 55.1],
+      ["武汉", 86.4, 65.2, 82.5],
+      ["成都", 72.4, 53.9, 39.1],
+    ],
+  },
+  xAxis: { type: "category" },
+  yAxis: {},
+  series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }],
 }
 
 onMounted(() => {
