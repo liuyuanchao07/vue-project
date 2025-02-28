@@ -7,6 +7,37 @@
         </el-col>
       </el-row>
     </div>
+    <div class="dashboard_echart">
+      <el-row :gutter="12">
+        <el-col :span="7"
+          ><el-card>
+            <template #header>
+              <div class="card-header">
+                <span>Card name</span>
+              </div>
+            </template>
+          </el-card></el-col
+        >
+        <el-col :span="10"
+          ><el-card>
+            <template #header>
+              <div class="card-header">
+                <span>Card name</span>
+              </div>
+            </template>
+          </el-card></el-col
+        >
+        <el-col :span="7"
+          ><el-card>
+            <template #header>
+              <div class="card-header">
+                <span>Card name</span>
+              </div>
+            </template>
+          </el-card></el-col
+        >
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -29,4 +60,8 @@ onMounted(() => {
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.dashboard_echart {
+  margin-top: 20px;
+}
+</style>
