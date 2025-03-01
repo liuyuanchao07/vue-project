@@ -23,6 +23,15 @@ import useLoginStore from "@/store/login"
 const loginStore = useLoginStore()
 const accountFormRef = ref<FormInstance>()
 
+loginStore.$onAction(({ name, store, store, after }) => {
+  console.log(name)
+  console.log(store)
+  console.log(store)
+  after(() => {
+    console.log("actions执行完 触发after")
+  })
+})
+
 interface accountRuleForm {
   username: string
   password: string
