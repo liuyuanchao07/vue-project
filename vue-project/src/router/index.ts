@@ -7,6 +7,8 @@ console.log(import.meta.env.VITE_MODE)
 
 const router = createRouter({
   history: createWebHistory(),
+  strict: true,
+  sensitive: true,
   routes: [
     {
       path: "/",
